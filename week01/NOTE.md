@@ -1,5 +1,7 @@
 scrapy startproject spiders
+
 scrapy genspider movies douban.com
+
 scrapy crawl movies
 
 dont_filter=true  不受allow_domain的影响
