@@ -1,0 +1,46 @@
+import pandas as pd
+import numpy as np
+
+data = pd.DataFrame({
+	"id":[x for x in range(1,21)],
+    "age":np.random.randint(15,50,20)
+})
+
+table1 = pd.DataFrame({
+    "id":np.random.randint(1,21,10),
+    "order_id":np.random.randint(100,999,10),
+    "column_name":'same'
+})
+
+group = ['xx','yy','zz']
+table2 = pd.DataFrame({
+    "id":[x for x in range(1,11)],
+    "order_id":np.random.randint(100,999,10),
+    "name":[group[x] for x in np.random.randint(0,len(group),10)]
+})
+# 1. SELECT * FROM data;
+data
+# 2. SELECT * FROM data LIMIT 10;
+data[0:10]
+# 3. SELECT id FROM data;  //id 是 data 表的特定一列
+data['id']
+# 4. SELECT COUNT(id) FROM data;
+data['id'].count()
+# 5. SELECT * FROM data WHERE id<1000 AND age>30;
+data[(data['id'] < 1000) & (data['age'] >30 )]
+# 6. SELECT id,COUNT(DISTINCT order_id) FROM table1 GROUP BY id;
+table1.drop_duplicates(subset=['id','order_id'],keep='first').groupby('id').aggregate({'order_id':'count'}).rename(columns={'order_id':'diff_oid_count'})
+
+# 7. SELECT * FROM table1 t1 INNER JOIN table2 t2 ON t1.id = t2.id;
+pd.merge(table1,table2,on='id')
+
+
+# 8. SELECT * FROM table1 UNION SELECT * FROM table2;
+
+pd.concat([table1,table2])
+# 9. DELETE FROM table1 WHERE id=10;
+
+table1[table1['id'] != 10]
+
+# 10. ALTER TABLE table1 DROP COLUMN column_name;
+table1.drop(columns=['column_name'],inplace=True)
